@@ -82,10 +82,9 @@ cat <<'EOF'
 == Next: set up the Cloudflare tunnel ==
 You need a free Cloudflare account and a domain managed by Cloudflare.
 
-1. Set a strong password. Create a file named .env next to docker-compose.yml:
-     DESKTOP_PASSWORD=<a long random password>
-   and make docker-compose.yml use PASSWORD: ${DESKTOP_PASSWORD}.
-   Do not commit .env.
+1. Set a strong password. go to docker-compose.yml:
+find the line mentioning password and change it to something only YOU know,
+DO NOT PUT IT AS 1234 OR KEEP IT AS change-this-password
 
 2. Start the desktop:
      ./reopen-os.sh
