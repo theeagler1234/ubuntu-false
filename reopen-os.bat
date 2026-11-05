@@ -1,7 +1,7 @@
 @echo off
 rem Windows version of reopen-os.sh
 cd /d "%~dp0"
-docker compose up -d --wait
+docker compose up -d --build --wait
 if errorlevel 1 (
     echo.
     echo Failed to start the desktop. Is Docker Desktop running?

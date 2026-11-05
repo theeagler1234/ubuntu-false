@@ -1,4 +1,26 @@
 services:
+  # Front door: asks for the access code, then proxies to the desktop.
+  # This is the only thing exposed to the outside (port 3000).
+  access-gate:
+    build: ./access-gate
+    container_name: ubuntu-access-gate
+    environment:
+      ACCESS_CODE: yk_you_could_js_read_the_docker-compose.yml_and_get_this_code_but_you_asked_me_lol
+      UPSTREAM: http://ubuntu-desktop:3000
+      GATE_PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ubuntu-desktop
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:3000/__gate/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # The desktop itself. No published ports: it can only be reached through
+  # the access-gate over the compose network.
   ubuntu-desktop:
     image: lscr.io/linuxserver/webtop:ubuntu-xfce
     container_name: ubuntu-desktop
@@ -9,7 +31,6 @@ services:
       CUSTOM_USER: ubuntu
       PASSWORD: change-this-password
       TITLE: Ubuntu Codespace Desktop
-    network_mode: host
     privileged: true
     security_opt:
       - seccomp:unconfined

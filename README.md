@@ -16,7 +16,11 @@ From the repository directory, run:
 
 The script starts the desktop and waits until the container is healthy.
 
-In VS Code, open the **Ports** panel and open port `3000` (`Ubuntu desktop (HTTP)`). Port `3001` is also forwarded for HTTPS redirects.
+In VS Code, open the **Ports** panel and open port `3000` (`Ubuntu desktop (HTTP)`).
+
+## Access code
+
+Before anyone can reach the desktop they must enter an access code. Port `3000` is served by a small `access-gate` container that shows a code prompt; the desktop itself has no exposed ports and can only be reached through the gate. Once the right code is entered, the browser is remembered for 30 days (`COOKIE_DAYS`).
 
 ## Login
 
@@ -39,4 +43,4 @@ Desktop files persist in `ubuntu-desktop-config/`.
 
 ## First-time Codespaces setup
 
-If ports `3000` and `3001` do not appear in the Ports panel, run **Codespaces: Rebuild Container** from the VS Code Command Palette, then run `./reopen-os.sh` again. The ports are configured in `.devcontainer/devcontainer.json`.
+If port `3000` does not appear in the Ports panel, run **Codespaces: Rebuild Container** from the VS Code Command Palette, then run `./reopen-os.sh` again. The ports are configured in `.devcontainer/devcontainer.json`.
