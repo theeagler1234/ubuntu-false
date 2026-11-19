@@ -1,0 +1,16 @@
+#!/usr/bin/with-contenv bash
+# s6 service: access-code gate in front of the desktop.
+# Listens on the platform's public $PORT and proxies to the Webtop nginx.
+
+export GATE_PORT="${PORT:-3000}"
+export UPSTREAM="http://127.0.0.1:${CUSTOM_PORT:-3100}"
+
+if [[ -z "${ACCESS_CODE:-}" ]]; then
+  echo "[gate] ACCESS_CODE is not set - refusing to start an open gate." >&2
+  # Don't spin: s6 restarts this service on exit.
+  sleep 30
+  exit 1
+fi
+
+# Run unprivileged; gate.py itself exits if ACCESS_CODE is empty.
+exec s6-setuidgid abc /opt/gate/bin/python -u /opt/gate/gate.py

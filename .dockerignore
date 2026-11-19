@@ -1,0 +1,10 @@
+.git
+.gitignore
+.gitattributes
+.devcontainer
+ubuntu-desktop-config
+*.bat
+*.sh
+codespace_usage.py
+docker-compose.yml
+README.md

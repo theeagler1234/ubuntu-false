@@ -1,2 +1,4 @@
 *.bat text eol=crlf
 *.sh text eol=lf
+Dockerfile text eol=lf
+deploy/custom-services.d/* text eol=lf
