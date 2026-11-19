@@ -10,12 +10,15 @@
 
 FROM lscr.io/linuxserver/webtop:ubuntu-xfce
 
-# Python + aiohttp (same pinned version as access-gate/Dockerfile) in a venv,
-# so it can't clash with the desktop's system Python packages.
+# Python + aiohttp in a venv, so it can't clash with the desktop's system
+# Python packages. The base image ships Python 3.14, and the 3.10.10 pin used in
+# access-gate/Dockerfile has no 3.14 wheel, so pip tried to compile it from
+# source and failed without Python headers. 3.14.5 has a 3.14 wheel.
+# --only-binary makes any future missing wheel fail fast instead of compiling.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends python3 python3-venv \
  && python3 -m venv /opt/gate \
- && /opt/gate/bin/pip install --no-cache-dir aiohttp==3.10.10 \
+ && /opt/gate/bin/pip install --no-cache-dir --only-binary=:all: aiohttp==3.14.5 \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/*
 
